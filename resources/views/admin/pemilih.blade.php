@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Manajemen User — E-Voting</title>
+    <title>Manajemen User — E-Voting OSIS</title>
     <style>
         :root { --primary: #2563eb; --bg: #f8fafc; }
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: var(--bg); margin: 0; display: flex; height: 100vh; overflow: hidden; }
@@ -26,6 +26,16 @@
         .form-control { width: 100%; padding: 8px; border: 1px solid #cbd5e1; border-radius: 6px; margin-top: 5px; box-sizing: border-box; }
         .alert-success { background: #dcfce7; color: #166534; padding: 10px; border-radius: 6px; margin-bottom: 15px; }
         .alert-danger { background: #fee2e2; color: #991b1b; padding: 10px; border-radius: 6px; margin-bottom: 15px; }
+        /* Styling agar pagination Laravel tidak merusak tampilan */
+        nav svg { width: 20px; height: 20px; display: inline-block; }
+        /* Styling agar Pagination rapi dan modern */
+        .pagination { display: flex; gap: 4px; list-style: none; padding: 0; margin: 10px 0; align-items: center; }
+        .pagination li { display: inline-block; }
+        .pagination li a, .pagination li span { display: block; padding: 6px 12px; border: 1px solid #cbd5e1; border-radius: 6px; background: white; color: #334155; text-decoration: none; font-size: 13px; font-weight: 500; }
+        .pagination li.active span { background: #2563eb; color: white; border-color: #2563eb; }
+        .pagination li.disabled span { background: #f8fafc; color: #94a3b8; }
+        /* Menyembunyikan teks duplikat bawaan yang berlebih jika ada */
+        .text-sm.text-gray-700.leading-5 { margin-bottom: 8px; font-size: 13px; color: #64748b; }
     </style>
 </head>
 <body>
@@ -57,7 +67,6 @@
             <div class="alert-danger">{{ $errors->first() }}</div>
         @endif
 
-        <!-- Form Tambah atau Edit Pemilih -->
         <div class="card">
             <h3 style="margin-top:0;">{{ isset($editPemilih) ? 'Edit Data Pemilih' : 'Tambah Pemilih Baru' }}</h3>
             
@@ -90,11 +99,10 @@
             </form>
         </div>
 
-        <!-- Form Import Excel / CSV -->
         <div class="card" style="background: #f8fafc; border: 1px dashed #cbd5e1;">
-            <h3 style="margin-top:0; font-size: 15px;">📥 Import Massal DPT (Format CSV)</h3>
+            <h3 style="margin-top:0; font-size: 15px;">Import Massal DPT (Format CSV)</h3>
             <p style="font-size: 13px; color: #64748b; margin-bottom: 15px;">
-                Format kolom baris file CSV: <strong>NIS, Nama, Kelas</strong> (Baris pertama header bebas/bisa dilewati).
+                Format kolom baris file CSV: NIS, Nama, Kelas.
             </p>
             
             <form action="{{ route('admin.pemilih.import') }}" method="POST" enctype="multipart/form-data">
@@ -107,8 +115,7 @@
                 </div>
             </form>
         </div>
-        
-        <!-- Tabel Daftar Pemilih -->
+
         <div class="card">
             <h3 style="margin-top:0;">Daftar Siswa Terdaftar</h3>
             <table>
@@ -133,7 +140,6 @@
                     </td>
                     <td>
                         <div style="display: flex; gap: 5px;">
-                            <!-- Tombol Edit -->
                             <a href="{{ route('admin.pemilih.edit', $p->id) }}" class="btn btn-warning" style="padding: 5px 10px; font-size: 11px;">Edit</a>
                             
                             <form action="/admin/pemilih/{{ $p->id }}" method="POST" onsubmit="return confirm('Yakin ingin menghapus data ini?')">
