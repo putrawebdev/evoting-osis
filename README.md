@@ -1,4 +1,3 @@
-```markdown
 # 📚 Dokumentasi Backend E-Voting OSIS
 
 Dokumentasi ini dibuat untuk memandu rekan frontend dalam mengintegrasikan antarmuka (UI) dengan backend Laravel pada proyek **E-Voting OSIS SMK Metland Cibitung**.
@@ -12,8 +11,7 @@ Jika kamu baru saja melakukan *clone* repository ini dari GitHub, ikuti langkah-
 1. **Install Dependencies PHP (Composer):**
    ```bash
    composer install
-
-```
+   ```
 
 2. **Duplikat File Konfigurasi Environment:**
 Salin file `.env.example` dan ubah namanya menjadi `.env`, atau jalankan perintah:
@@ -137,7 +135,5 @@ Berikut adalah daftar *URL Routes* yang tersedia di *backend* untuk dihubungkan 
 1. **CSRF Token**: Setiap form dengan metode `POST`, `PUT`, atau `DELETE` **wajib** menyertakan directive `@csrf` (jika menggunakan Blade Laravel).
 2. **File Upload**: Form yang mengirimkan file foto kandidat atau file import CSV wajib menggunakan atribut `enctype="multipart/form-data"`.
 3. **Pemberian Suara**: Backend sudah dilindungi dengan *database transaction* dan *pessimistic locking* untuk mencegah *double vote*.
-
-```
 
 ```
