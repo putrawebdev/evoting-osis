@@ -31,7 +31,7 @@ php artisan key:generate
 
 4. **Jalankan Migrasi Database & Seeder:**
 ```bash
-php artisan migrate
+php artisan migrate --seed
 
 ```
 
