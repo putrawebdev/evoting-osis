@@ -79,7 +79,7 @@ class KandidatController extends Controller
             'nama_wakil' => $request->nama_wakil,
             'visi' => $request->visi,
             'misi' => $request->misi,
-            'proggram' => $request->program,
+            'proggram' => $request->program ?? null, // Fleksibel: jika kosong diset null
             'foto' => $fotoPath,
             'created_at' => now(),
             'updated_at' => now()
@@ -98,7 +98,7 @@ class KandidatController extends Controller
             'nama_wakil' => $request->nama_wakil,
             'visi' => $request->visi,
             'misi' => $request->misi,
-            'proggram' => $request->program,
+            'proggram' => $request->program ?? null, // Fleksibel: jika kosong diset null
             'updated_at' => now()
         ];
 
