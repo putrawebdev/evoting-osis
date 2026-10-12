@@ -8,6 +8,8 @@ use App\Models\Kandidat;
 use App\Models\Pemilih;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Response;
+
 
 class KandidatController extends Controller
 {
@@ -17,6 +19,16 @@ class KandidatController extends Controller
             'status' => 'success',
             'data' => Kandidat::all()
         ], 200);
+    }
+    public function getFoto($filename)
+    {
+        $path = storage_path('app/public/kandidat/' . $filename);
+
+        if (!file_exists($path)) {
+            return response()->json(['message' => 'Foto tidak ditemukan'], 404);
+        }
+
+        return response()->file($path);
     }
 
     public function vote(Request $request)

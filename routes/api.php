@@ -30,3 +30,6 @@ Route::get('/admin/belum-memilih', [PemilihController::class, 'belumMemilih']);
 Route::get('/admin/export/excel', [PemilihController::class, 'exportExcel']);
 Route::get('/admin/export/pdf', [PemilihController::class, 'exportPdf']);
 Route::get('/admin/riwayat', [PemilihController::class, 'riwayat']);
+
+
+Route::get('/kandidat/foto/{filename}', [KandidatController::class, 'getFoto']);
