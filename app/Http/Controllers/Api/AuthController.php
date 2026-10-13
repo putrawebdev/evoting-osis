@@ -23,6 +23,15 @@ class AuthController extends Controller
         if ($siswa->sudah_memilih == 1) {
             return response()->json(['reason' => 'voted', 'message' => 'NISN ini sudah memberikan suara. Terima kasih!'], 403);
         }
+        
+        // ---> MENCATAT RIWAYAT LOGIN SISWA (PEMILIH) <---
+        DB::table('riwayat')->insert([
+            'aktor' => $siswa->nis . ' - ' . $siswa->nama, 
+            'aksi' => 'Pemilih',
+            'detail' => 'Berhasil masuk ke bilik suara.',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
 
         return response()->json([
             'student' => [
@@ -42,6 +51,16 @@ class AuthController extends Controller
         $admin = DB::table('admin')->where('username', $request->username)->first();
 
         if ($admin && Hash::check($request->password, $admin->password_hash)) {
+            
+            // ---> MENCATAT RIWAYAT LOGIN ADMIN <---
+            DB::table('riwayat')->insert([
+                'aktor' => 'Admin (' . $admin->username . ')', 
+                'aksi' => 'Login Admin', 
+                'detail' => 'Berhasil masuk ke panel administrator.',
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+
             return response()->json([
                 'message' => 'Login sukses',
                 'role' => $admin->role

@@ -80,6 +80,15 @@ class PemilihController extends Controller
             'updated_at' => now()
         ]);
 
+        // ---> MENCATAT RIWAYAT TAMBAH PEMILIH (SATUAN) <---
+        DB::table('riwayat')->insert([
+            'aktor' => 'Admin', 
+            'aksi' => 'Pemilih',
+            'detail' => 'Menambahkan data pemilih baru: ' . $request->nama . ' (' . $request->nis . ')',
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+
         return response()->json(['status' => 'success']);
     }
 
@@ -124,6 +133,15 @@ class PemilihController extends Controller
                 }
             }
         }
+
+        // ---> MENCATAT RIWAYAT IMPORT EXCEL <---
+        DB::table('riwayat')->insert([
+            'aktor' => 'Admin', 
+            'aksi' => 'Pemilih',
+            'detail' => "Mengimpor data CSV/Excel: $berhasil data ditambahkan, $gagal dilewati.",
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
 
         return response()->json([
             'status' => 'success',

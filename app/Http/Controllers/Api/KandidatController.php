@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Response;
 
-
 class KandidatController extends Controller
 {
     public function index()
@@ -20,6 +19,7 @@ class KandidatController extends Controller
             'data' => Kandidat::all()
         ], 200);
     }
+    
     public function getFoto($filename)
     {
         $path = storage_path('app/public/kandidat/' . $filename);
@@ -52,10 +52,20 @@ class KandidatController extends Controller
                 return response()->json(['message' => 'Anda sudah memberikan suara!'], 403);
             }
 
+            // Update status pemilih
             $pemilih->paslon_dipilih = $request->id_kandidat;
             $pemilih->sudah_memilih = 1;
             $pemilih->waktu_memilih = now();
             $pemilih->save();
+
+            // ---> MENCATAT RIWAYAT VOTING <---
+            DB::table('riwayat')->insert([
+                'aktor' => $pemilih->nis . ' - ' . $pemilih->nama, // Nama siswa yang memilih
+                'aksi' => 'Memilih', // Kategori warna hijau di Frontend
+                'detail' => 'Telah memberikan hak suara pada Pilkaos.',
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
 
             DB::commit();
             return response()->json(['message' => 'Suara berhasil disimpan!'], 200);
@@ -91,8 +101,17 @@ class KandidatController extends Controller
             'nama_wakil' => $request->nama_wakil,
             'visi' => $request->visi,
             'misi' => $request->misi,
-            'proggram' => $request->program ?? null, // Fleksibel: jika kosong diset null
+            'proggram' => $request->program ?? null,
             'foto' => $fotoPath,
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+
+        // ---> MENCATAT RIWAYAT TAMBAH KANDIDAT <---
+        DB::table('riwayat')->insert([
+            'aktor' => 'Admin', 
+            'aksi' => 'Kandidat',
+            'detail' => 'Menambahkan paslon baru: ' . $request->nama_ketua . ' & ' . $request->nama_wakil,
             'created_at' => now(),
             'updated_at' => now()
         ]);
@@ -110,7 +129,7 @@ class KandidatController extends Controller
             'nama_wakil' => $request->nama_wakil,
             'visi' => $request->visi,
             'misi' => $request->misi,
-            'proggram' => $request->program ?? null, // Fleksibel: jika kosong diset null
+            'proggram' => $request->program ?? null,
             'updated_at' => now()
         ];
 
@@ -120,6 +139,16 @@ class KandidatController extends Controller
         }
 
         DB::table('kandidat')->where('id', $id)->update($updateData);
+
+        // ---> MENCATAT RIWAYAT UPDATE KANDIDAT <---
+        DB::table('riwayat')->insert([
+            'aktor' => 'Admin', 
+            'aksi' => 'Kandidat',
+            'detail' => 'Memperbarui data paslon: ' . $request->nama_ketua,
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+
         return response()->json(['status' => 'success']);
     }
 
@@ -129,6 +158,15 @@ class KandidatController extends Controller
         if ($kandidat) {
             if ($kandidat->foto) Storage::disk('public')->delete($kandidat->foto);
             DB::table('kandidat')->where('id', $id)->delete();
+
+            // ---> MENCATAT RIWAYAT HAPUS KANDIDAT <---
+            DB::table('riwayat')->insert([
+                'aktor' => 'Admin', 
+                'aksi' => 'Kandidat',
+                'detail' => 'Menghapus data paslon: ' . $kandidat->nama_ketua,
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
         }
         return response()->json(['status' => 'success']);
     }
