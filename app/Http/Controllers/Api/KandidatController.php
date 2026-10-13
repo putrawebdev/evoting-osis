@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Response;
 
+#nothing found in here!
 class KandidatController extends Controller
 {
     public function index()
