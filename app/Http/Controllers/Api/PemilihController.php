@@ -240,10 +240,13 @@ class PemilihController extends Controller
         $sheet->getColumnDimension('D')->setWidth(15);
         $sheet->getColumnDimension('E')->setWidth(15);
 
-        $writer = new Xlsx($spreadsheet);
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment; filename="Laporan_Hasil_EVoting_OSIS.xlsx"');
+        // GANTI MENJADI INI: Gunakan Writer HTML tapi didownload sebagai XLS jadul
+        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Html($spreadsheet);
+        
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment; filename="Laporan_Hasil_EVoting_OSIS.xls"');
         header('Cache-Control: max-age=0');
+        
         $writer->save('php://output');
         exit;
     }
